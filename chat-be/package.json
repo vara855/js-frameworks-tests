@@ -1,0 +1,31 @@
+{
+  "name": "chat-be",
+  "version": "1.0.0",
+  "description": "This project was bootstrapped with Fastify-CLI.",
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "tap \"test/**/*.test.js\"",
+    "start": "fastify start -l info app.js",
+    "dev": "fastify start -w -l info -P app.js"
+  },
+  "keywords": [],
+  "author": "vara855",
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/websocket": "^7.1.1",
+    "@fastify/autoload": "^5.0.0",
+    "@fastify/sensible": "^5.0.0",
+    "fastify": "^4.0.0",
+    "fastify-cli": "^5.7.0",
+    "fastify-plugin": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.5.4",
+    "@types/node": "^16.18.11",
+    "tap": "^16.1.0",
+    "typescript": "^4.9.4"
+  }
+}
