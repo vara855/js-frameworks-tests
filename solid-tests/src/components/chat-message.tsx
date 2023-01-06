@@ -1,14 +1,8 @@
 import { Component } from "solid-js";
+import { CMessage } from "../types";
 
 export type ChatMessageProps = {
-  message: {
-    message: string;
-    color: string;
-    user: {
-      name: string;
-      email: string;
-    };
-  };
+  message: CMessage;
 };
 
 const ChatMessage: Component<ChatMessageProps> = ({ message }) => {

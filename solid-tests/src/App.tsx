@@ -1,5 +1,6 @@
 import {
   Component,
+  createEffect,
   createMemo,
   createResource,
   createSignal,
@@ -8,6 +9,7 @@ import {
   Show,
 } from "solid-js";
 import ChatMessage from "./components/chat-message";
+import { CMessage } from "./types";
 
 const checkThatBeWorks = async (): Promise<{ health: string }> => {
   const resp = await fetch("/be");
@@ -26,8 +28,14 @@ const ErrorRenderer: Component<{ error: any }> = ({ error }) => {
 };
 
 const App: Component = () => {
+  let chatContainerRef:
+    | HTMLDivElement
+    | ((el: HTMLDivElement) => void)
+    | undefined;
+
   const [data] = createResource(checkThatBeWorks);
-  const [messages, setMessages] = createSignal<any[]>();
+  const [scrollPaused, setScrollPaused] = createSignal<boolean>(false);
+  const [messages, setMessages] = createSignal<CMessage[]>();
   const wsClient = createMemo(() => {
     const ws = new WebSocket("ws://localhost:3000/ws");
     console.log("createMemo");
@@ -43,9 +51,26 @@ const App: Component = () => {
     return ws;
   });
 
+  createEffect(() => {
+    console.log(chatContainerRef);
+    if (
+      !scrollPaused() &&
+      chatContainerRef &&
+      typeof chatContainerRef !== "function"
+    ) {
+      chatContainerRef.scroll({
+        top: chatContainerRef.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+    return messages();
+  });
+
   return (
-    <>
-      <div class="head">Solid js - Chat</div>
+    <main class="main">
+      <div class="head">
+        Solid js - Chat <div>{!data.error && "👌 Backend is OK!"}</div>
+      </div>
       <div class="content">
         <Show when={!data.loading} fallback={<div>Loading...</div>}>
           {data.error ? (
@@ -54,18 +79,30 @@ const App: Component = () => {
             </div>
           ) : (
             <>
-              <p>Backend is ready 👌</p>
-              <h2>Chat messages:</h2>
-              <div class="chat">
+              <div class="chat-header">
+                <h2>Chat messages:</h2>
+                <div>
+                  <button onClick={() => setScrollPaused((v) => !v)}>
+                    {scrollPaused()
+                      ? "Enable Auto-scroll"
+                      : "Disable Auto-scroll"}
+                  </button>
+                </div>
+              </div>
+              <div class="chat" ref={chatContainerRef}>
                 <For each={messages()} fallback={"no messages yet"}>
                   {(message) => <ChatMessage message={message} />}
                 </For>
+              </div>
+              <div class="chat-controls">
+                <input class="chat-input" type="text" placeholder="Type Your Message" />
+                <button>Send</button>
               </div>
             </>
           )}
         </Show>
       </div>
-    </>
+    </main>
   );
 };
 
