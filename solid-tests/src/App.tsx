@@ -1,4 +1,13 @@
-import { Component, createResource, Show } from "solid-js";
+import {
+  Component,
+  createMemo,
+  createResource,
+  createSignal,
+  For,
+  onCleanup,
+  Show,
+} from "solid-js";
+import ChatMessage from "./components/chat-message";
 
 const checkThatBeWorks = async (): Promise<{ health: string }> => {
   const resp = await fetch("/be");
@@ -16,22 +25,46 @@ const ErrorRenderer: Component<{ error: any }> = ({ error }) => {
   );
 };
 
-const ws = new WebSocket("ws://localhost:3000/ws");
-console.log({ ws });
 const App: Component = () => {
   const [data] = createResource(checkThatBeWorks);
-  console.log("data.error :>> ", data.error);
+  const [messages, setMessages] = createSignal<any[]>();
+  const wsClient = createMemo(() => {
+    const ws = new WebSocket("ws://localhost:3000/ws");
+    console.log("createMemo");
+    onCleanup(() => {
+      console.log("cleanup");
+      ws.close();
+    });
+    ws.onmessage = (event: MessageEvent) => {
+      const data = JSON.parse(event.data);
+      console.log("Received message from server: ", data);
+      setMessages((p = []) => [...p, data]);
+    };
+    return ws;
+  });
+
   return (
     <>
-      <Show when={!data.loading} fallback={<div>Loading...</div>}>
-        {data.error ? (
-          <div>
-            Failed to fetch BE heath: <ErrorRenderer error={data.error} />
-          </div>
-        ) : (
-          <h1>Hello</h1>
-        )}
-      </Show>
+      <div class="head">Solid js - Chat</div>
+      <div class="content">
+        <Show when={!data.loading} fallback={<div>Loading...</div>}>
+          {data.error ? (
+            <div>
+              Failed to fetch BE heath: <ErrorRenderer error={data.error} />
+            </div>
+          ) : (
+            <>
+              <p>Backend is ready 👌</p>
+              <h2>Chat messages:</h2>
+              <div class="chat">
+                <For each={messages()} fallback={"no messages yet"}>
+                  {(message) => <ChatMessage message={message} />}
+                </For>
+              </div>
+            </>
+          )}
+        </Show>
+      </div>
     </>
   );
 };
