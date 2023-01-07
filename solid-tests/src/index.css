@@ -46,6 +46,11 @@ code {
   background-color: rgb(233, 244, 247);
 }
 
+.chat-message__admin {
+  background-color: rgb(204, 232, 232);
+  border: 1px solid rgb(156, 178, 207);
+}
+
 .chat-message > :first-child {
   font-weight: 600;
 }
@@ -64,18 +69,25 @@ code {
   align-items: center;
 }
 
+.chat-toolbar {
+  display: flex;
+  gap: .5rem;
+}
+
 .chat-controls {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 0.3rem;
 }
+.chat-controls > input {
+  flex: 0 0 75%;
+}
 .chat-controls > button {
   flex: 1;
 }
 
 .chat-input {
-  flex: 0 0 75%;
   padding: .8rem .6rem;
   box-shadow: none;
   border-radius: 8px;

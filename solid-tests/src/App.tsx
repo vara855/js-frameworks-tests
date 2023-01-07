@@ -26,7 +26,6 @@ const ErrorRenderer: Component<{ error: any }> = ({ error }) => {
     <span style={{ color: "tomato" }}>{error.message ?? "unknown error"}</span>
   );
 };
-
 const App: Component = () => {
   let chatContainerRef:
     | HTMLDivElement
@@ -35,6 +34,10 @@ const App: Component = () => {
 
   const [data] = createResource(checkThatBeWorks);
   const [scrollPaused, setScrollPaused] = createSignal<boolean>(false);
+  const [userName, setUserName] = createSignal<string>(
+    `New User ${new Date().toLocaleTimeString()}`
+  );
+  const [chatInput, setChatInput] = createSignal<string>("");
   const [messages, setMessages] = createSignal<CMessage[]>();
   const wsClient = createMemo(() => {
     const ws = new WebSocket("ws://localhost:3000/ws");
@@ -50,6 +53,20 @@ const App: Component = () => {
     };
     return ws;
   });
+
+  const handleSend = () => {
+    const message: CMessage = {
+      message: chatInput(),
+      type: "message",
+      color: "tomato",
+      user: {
+        email: "bla",
+        name: userName(),
+      },
+    };
+    wsClient().send(JSON.stringify(message));
+    setChatInput("");
+  };
 
   createEffect(() => {
     console.log(chatContainerRef);
@@ -81,7 +98,16 @@ const App: Component = () => {
             <>
               <div class="chat-header">
                 <h2>Chat messages:</h2>
-                <div>
+                <div class="chat-toolbar">
+                  <input
+                    value={userName()}
+                    onChange={(e: any) => {
+                      setUserName(e.target.value);
+                    }}
+                    class="chat-input"
+                    type="text"
+                    placeholder="User Name"
+                  />
                   <button onClick={() => setScrollPaused((v) => !v)}>
                     {scrollPaused()
                       ? "Enable Auto-scroll"
@@ -95,8 +121,16 @@ const App: Component = () => {
                 </For>
               </div>
               <div class="chat-controls">
-                <input class="chat-input" type="text" placeholder="Type Your Message" />
-                <button>Send</button>
+                <input
+                  value={chatInput()}
+                  onChange={(e: any) => {
+                    setChatInput(e.target.value);
+                  }}
+                  class="chat-input"
+                  type="text"
+                  placeholder="Type Your Message"
+                />
+                <button onClick={handleSend}>Send</button>
               </div>
             </>
           )}

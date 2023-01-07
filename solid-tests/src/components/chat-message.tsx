@@ -1,4 +1,5 @@
 import { Component } from "solid-js";
+import clsx from "clsx";
 import { CMessage } from "../types";
 
 export type ChatMessageProps = {
@@ -6,9 +7,12 @@ export type ChatMessageProps = {
 };
 
 const ChatMessage: Component<ChatMessageProps> = ({ message }) => {
-  console.log("Rendered message", message);
   return (
-    <div class="chat-message">
+    <div
+      class={clsx("chat-message", {
+        ["chat-message__admin"]: message.type === "admin-message",
+      })}
+    >
       <span style={{ color: message.color }}>{message.user.name}</span>{" "}
       <span>{message.message}</span>
     </div>
