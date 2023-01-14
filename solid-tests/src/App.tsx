@@ -7,8 +7,11 @@ import {
   For,
   onCleanup,
   Show,
+  useContext,
 } from "solid-js";
+import { ChatFooter } from "./components/chat-footer";
 import ChatMessage from "./components/chat-message";
+import { ChatWsContext } from "./contexts/chat-ws-context";
 import { CMessage } from "./types";
 
 const checkThatBeWorks = async (): Promise<{ health: string }> => {
@@ -37,36 +40,8 @@ const App: Component = () => {
   const [userName, setUserName] = createSignal<string>(
     `New User ${new Date().toLocaleTimeString()}`
   );
-  const [chatInput, setChatInput] = createSignal<string>("");
-  const [messages, setMessages] = createSignal<CMessage[]>();
-  const wsClient = createMemo(() => {
-    const ws = new WebSocket("ws://localhost:3000/ws");
-    console.log("createMemo");
-    onCleanup(() => {
-      console.log("cleanup");
-      ws.close();
-    });
-    ws.onmessage = (event: MessageEvent) => {
-      const data = JSON.parse(event.data);
-      console.log("Received message from server: ", data);
-      setMessages((p = []) => [...p, data]);
-    };
-    return ws;
-  });
-
-  const handleSend = () => {
-    const message: CMessage = {
-      message: chatInput(),
-      type: "message",
-      color: "tomato",
-      user: {
-        email: "bla",
-        name: userName(),
-      },
-    };
-    wsClient().send(JSON.stringify(message));
-    setChatInput("");
-  };
+  const contextModel = useContext(ChatWsContext);
+  console.log("contextModel :>> ", contextModel);
 
   createEffect(() => {
     console.log(chatContainerRef);
@@ -80,7 +55,7 @@ const App: Component = () => {
         behavior: "smooth",
       });
     }
-    return messages();
+    return contextModel?.messages();
   });
 
   return (
@@ -116,21 +91,15 @@ const App: Component = () => {
                 </div>
               </div>
               <div class="chat" ref={chatContainerRef}>
-                <For each={messages()} fallback={"no messages yet"}>
+                <For
+                  each={contextModel?.messages()}
+                  fallback={"no messages yet"}
+                >
                   {(message) => <ChatMessage message={message} />}
                 </For>
               </div>
               <div class="chat-controls">
-                <input
-                  value={chatInput()}
-                  onChange={(e: any) => {
-                    setChatInput(e.target.value);
-                  }}
-                  class="chat-input"
-                  type="text"
-                  placeholder="Type Your Message"
-                />
-                <button onClick={handleSend}>Send</button>
+                <ChatFooter userName={userName()} />
               </div>
             </>
           )}

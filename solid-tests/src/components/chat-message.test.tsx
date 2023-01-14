@@ -1,5 +1,5 @@
 import ChatMessage from "./chat-message";
-import { render, screen } from "solid-testing-library";
+import { render, screen } from "@solidjs/testing-library";
 
 describe("<ChatMessage/>", () => {
   test("should render correct classnames depends on the meesage type", () => {
@@ -16,6 +16,7 @@ describe("<ChatMessage/>", () => {
         }}
       />
     ));
+
     expect(api.container).toMatchInlineSnapshot(`
       <div>
         <div
