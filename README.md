@@ -63,6 +63,25 @@
 
 ### React.js
 
+* Шаблон, как легко стартануть? (npm create ...)
+  5/5
+* Typescript support
+  5/5
+* Props
+  5/5
+* Как хранить состояние
+  * useState 4/5
+  * Context 5/5
+* Control flow
+  * 4.5/5
+* Unit Tests. Какие библиотеки и фреймворки.
+  * testing-library 4/5;
+* Documentation.
+  5/5
+* Infra
+  * Dev tools 5/5
+  * ...
+
 #### Todos
 
 * [x] Разобраться почему деструктуризация пропсов в провайдере не работает. (Solid.js) <https://www.solidjs.com/guides/faq#why-do-i-lose-reactivity-when-i-destructure-props>
