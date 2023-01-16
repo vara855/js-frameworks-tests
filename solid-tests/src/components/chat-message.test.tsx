@@ -1,7 +1,8 @@
 import ChatMessage from "./chat-message";
-import { render, screen } from "@solidjs/testing-library";
+import { render, screen, cleanup } from "@solidjs/testing-library";
 
 describe("<ChatMessage/>", () => {
+  afterEach(() => cleanup());
   test("should render correct classnames depends on the meesage type", () => {
     let api = render(() => (
       <ChatMessage
