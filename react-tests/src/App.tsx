@@ -1,34 +1,73 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useEffect, useRef, useState } from "react";
+import "./App.css";
+import { useChatWsContext } from "./chat-ws-context";
+import { ChatFooter } from "./components/chat-footer";
+import ChatMessage from "./components/chat-message";
+import { useFetch } from "./useFetch";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const beStatus = useFetch("/be");
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const [userName, setUserName] = useState<string>(
+    () => `User - ${new Date().toLocaleTimeString()}`
+  );
+  const [scrollPaused, setScrollPaused] = useState<boolean>();
+  const contextModel = useChatWsContext();
+
+  useEffect(() => {
+    console.log();
+    if (
+      !scrollPaused &&
+      chatContainerRef &&
+      typeof chatContainerRef !== "function"
+    ) {
+      chatContainerRef.current?.scroll({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  }, [contextModel.messages]);
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <main className="main">
+      <div className="head">
+        React js - Chat
+        <div>{!beStatus.error && "👌 Backend is OK!"}</div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <div className="content">
+        {beStatus.isLoading && <div>Loading...</div>}
+        {!beStatus.isLoading && (
+          <>
+            <div className="chat-header">
+              <h2>Chat messages:</h2>
+              <div className="chat-toolbar">
+                <input
+                  value={userName}
+                  onChange={(e: any) => {
+                    setUserName(e.target.value);
+                  }}
+                  className="chat-input"
+                  type="text"
+                  placeholder="User Name"
+                />
+                <button onClick={() => setScrollPaused((v) => !v)}>
+                  {scrollPaused ? "Enable Auto-scroll" : "Disable Auto-scroll"}
+                </button>
+              </div>
+            </div>
+            <div className="chat" ref={chatContainerRef}>
+              {contextModel.messages.map((it, idx) => (
+                <ChatMessage key={idx} message={it} />
+              ))}
+            </div>
+            <div className="chat-controls">
+              <ChatFooter userName={userName} />
+            </div>
+          </>
+        )}
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+    </main>
+  );
 }
 
-export default App
+export default App;

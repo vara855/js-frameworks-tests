@@ -23,7 +23,7 @@ export const ChatWsContext = createContext<ChatWsContextModel>(undefined, {
 export const ChatWsContextProvider: ParentComponent = (props) => {
   const [messages, setMessages] = createSignal<CMessage[]>([]);
   const wsClient = createMemo(() => {
-    const ws = new WebSocket("ws://localhost:3000/ws");
+    const ws = new WebSocket("ws://localhost:3030/be/ws");
     console.log("createMemo");
     onCleanup(() => {
       console.log("cleanup");

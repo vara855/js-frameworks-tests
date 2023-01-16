@@ -1,0 +1,27 @@
+{
+  "name": "js-frmwrks-tests",
+  "version": "1.0.0",
+  "description": "На примере клиентских приложений без SSR.",
+  "main": "index.js",
+  "workspaces": [
+    "./*"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vara855/js-frameworks-tests.git"
+  },
+  "keywords": [
+    "js",
+    "frameworks",
+    "frontend"
+  ],
+  "author": "vara855",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vara855/js-frameworks-tests/issues"
+  },
+  "homepage": "https://github.com/vara855/js-frameworks-tests#readme"
+}

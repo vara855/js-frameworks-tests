@@ -11,6 +11,8 @@ export default defineConfig({
       "/be": {
         target: "http://localhost:3000",
         rewrite: (path) => path.replace(/^\/be/, ""),
+        ws: true,
+        secure: false,
       },
     },
   },

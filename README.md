@@ -4,7 +4,7 @@
 
 ## Frameworks
 
-* [Solid](./solid-tests) - Solid.js
+* [Solid](./solid-tests) - Solid.js ✅
 * [React](./react-tests) - React 18+
 * [Vue](./vue-tests) - Vue3
 * [Angular](./angular-tests) - Angular 14 (Standalone components).
@@ -46,7 +46,7 @@
   3.5/5 (mergeProps()?, destructuring props..., )
 * Как хранить состояние
   * Signals 5/5
-  * Context 4.5/5
+  * Context 5/5
 * Control flow
   * 4.5/5
 * Unit Tests. Какие библиотеки и фреймворки.
@@ -63,12 +63,7 @@
 
 ### React.js
 
-#### Pitfals
-
-```js
-const [state] = useState();
-```
-
 #### Todos
 
-* Разобраться почему деструктуризация пропсов в провайдере не работает.
+* [x] Разобраться почему деструктуризация пропсов в провайдере не работает. (Solid.js) <https://www.solidjs.com/guides/faq#why-do-i-lose-reactivity-when-i-destructure-props>
+* [ ] Тесты не работаю  при последующем запуске в Solid.js. (cleanup() не работает...).
