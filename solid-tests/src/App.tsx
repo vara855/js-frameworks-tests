@@ -1,28 +1,16 @@
 import {
   Component,
   createEffect,
-  createMemo,
   createResource,
   createSignal,
   For,
-  onCleanup,
   Show,
   useContext,
 } from "solid-js";
+import { checkThatBeWorks } from "./api/be-api";
 import { ChatFooter } from "./components/chat-footer";
 import ChatMessage from "./components/chat-message";
 import { ChatWsContext } from "./contexts/chat-ws-context";
-import { CMessage } from "./types";
-
-const checkThatBeWorks = async (): Promise<{ health: string }> => {
-  const resp = await fetch("/be");
-  if (resp.ok) {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    return resp.json();
-  } else {
-    throw new Error("BE is not available");
-  }
-};
 
 const ErrorRenderer: Component<{ error: any }> = ({ error }) => {
   return (
@@ -37,6 +25,7 @@ const App: Component = () => {
 
   const [data] = createResource(checkThatBeWorks);
   const [scrollPaused, setScrollPaused] = createSignal<boolean>(false);
+  let notReactiveScrollPaused = false;
   const [userName, setUserName] = createSignal<string>(
     `New User ${new Date().toLocaleTimeString()}`
   );
@@ -44,7 +33,6 @@ const App: Component = () => {
   console.log("contextModel :>> ", contextModel);
 
   createEffect(() => {
-    console.log(chatContainerRef);
     if (
       !scrollPaused() &&
       chatContainerRef &&
@@ -83,7 +71,12 @@ const App: Component = () => {
                     type="text"
                     placeholder="User Name"
                   />
-                  <button onClick={() => setScrollPaused((v) => !v)}>
+                  <button
+                    onClick={() => {
+                      setScrollPaused((v) => !v);
+                      notReactiveScrollPaused = !notReactiveScrollPaused;
+                    }}
+                  >
                     {scrollPaused()
                       ? "Enable Auto-scroll"
                       : "Disable Auto-scroll"}

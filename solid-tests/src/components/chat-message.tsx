@@ -1,12 +1,14 @@
-import { Component } from "solid-js";
+import { Component, createResource } from "solid-js";
 import clsx from "clsx";
 import { CMessage } from "../types";
+import { checkThatBeWorks } from "../api/be-api";
 
 export type ChatMessageProps = {
   message: CMessage;
 };
 
 const ChatMessage: Component<ChatMessageProps> = ({ message }) => {
+  const [data] = createResource(checkThatBeWorks);
   return (
     <div
       class={clsx("chat-message", {

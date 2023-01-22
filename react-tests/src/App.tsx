@@ -15,7 +15,6 @@ function App() {
   const contextModel = useChatWsContext();
 
   useEffect(() => {
-    console.log();
     if (
       !scrollPaused &&
       chatContainerRef &&
