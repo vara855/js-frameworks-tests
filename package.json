@@ -7,7 +7,8 @@
     "./*"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "be": "npm run -w chat-be dev"
   },
   "repository": {
     "type": "git",
