@@ -5,10 +5,10 @@
 ## Frameworks
 
 * [Solid](./solid-tests) - Solid.js ✅
-* [React](./react-tests) - React 18+
-* [Vue](./vue-tests) - Vue3
+* [React](./react-tests) - React 18+ ✅
+* [Vue](./vue-tests) - Vue3 ✅
+* [Svelte](./svelte-tests) - Only Svelte without svelte kit.
 * [Angular](./angular-tests) - Angular 14 (Standalone components).
-* Svelte - Only Svelte without svelte kit.
 * ...
 
 ## На что вообще смотрим?
@@ -22,6 +22,7 @@
 * Reactivity.
 * Data fetching (handle loading & error state, refetch when smth changed or by request, caching for many components).
 * Фреймворкнутость* - введение новых понятий, специальных registry, плагинов и тд и тп.
+* Пробрасывание пропсов (spread operator, naming props, JS code in props.);
 
 > ИМХО по фреймворкнутости*:
 > Создание фронтенд приложения должно быть простым. Это место, где не должно быть оверинжиниринга.
