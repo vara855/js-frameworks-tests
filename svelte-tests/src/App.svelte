@@ -17,8 +17,18 @@
     close: () => {
       wsClientRef.close();
     },
-    sendMessage: (message: any) => {
-      wsClientRef.send(JSON.stringify(message));
+    sendMessage: (message: string, userName: string) => {
+      wsClientRef.send(
+        JSON.stringify({
+          message: message,
+          type: "message",
+          color: "tomato",
+          user: {
+            email: "bla",
+            name: userName,
+          },
+        } as CMessage)
+      );
     },
   };
 </script>
@@ -27,6 +37,7 @@
   import { afterUpdate, onDestroy } from "svelte";
   import { readable, writable } from "svelte/store";
   import ChatMessage from "./lib/ChatMessage.svelte";
+  import ChatFooter from "./lib/ChatFooter.svelte";
 
   let scrollPaused = false;
   let status = {
@@ -34,6 +45,7 @@
     response: undefined,
     error: undefined,
   };
+  let userName = "User - " + new Date().toLocaleString();
   let chatDivElement: HTMLDivElement;
   let messages: CMessage[] = [];
   const fetchBeStatus = async () => {
@@ -49,27 +61,25 @@
   const reorderInRandom = () => {
     messages = messages.sort(() => Math.random());
   };
-  const autoScroll = () => {
-    if (chatDivElement && !scrollPaused && messages.length) {
+  const autoScroll = (messages: any[]) => {
+    if (chatDivElement && !scrollPaused && messages.length > 0) {
       chatDivElement.scroll({
         top: chatDivElement.scrollHeight,
         behavior: "smooth",
       });
     }
   };
+
+  // WTF? How to make reactivity controllable?
   $: {
     afterUpdate(() => {
-      if (chatDivElement && !scrollPaused && messages.length) {
-        chatDivElement.scroll({
-          top: chatDivElement.scrollHeight,
-          behavior: "smooth",
-        });
-      }
+      autoScroll(messages);
     });
   }
+
   messagesStore.subscribe((_messages) => {
     messages = _messages;
-    autoScroll();
+    // autoScroll();
   });
   console.log("messages :>> ");
   onDestroy(() => {
@@ -94,7 +104,12 @@
       <div class="chat-header">
         <h2>Chat messages:</h2>
         <div class="chat-toolbar">
-          <input class="chat-input" type="text" placeholder="User Name" />
+          <input
+            class="chat-input"
+            bind:value={userName}
+            type="text"
+            placeholder="User Name"
+          />
           <button on:click={() => reorderInRandom()}>Reorder in random</button>
           <button on:click={() => (scrollPaused = !scrollPaused)}>
             {scrollPaused ? "Enable Auto-scroll" : "Disable Auto-scroll"}
@@ -108,6 +123,9 @@
             {message}
           />
         {/each}
+      </div>
+      <div class="chat-controls">
+        <ChatFooter {userName} />
       </div>
     {/if}
     <!-- <div v-if="loading">Loading</div>
