@@ -82,6 +82,7 @@
   * Скрытое пробрасывание пропсов - Контексты.
   * Lifecycle
   * Improved Flow Components (For,Show ....)
+  * Custom attributes/directives
 
 #### Overall
 
@@ -158,20 +159,62 @@
   * Caching (1)
   * Error Handling (0)
   * Refetch (4)
-  3/5
+  4.8/5
 * Фреймворкнутость
   * Темплеитирование
   * Реактивность
+  * Custom attributes/directives
   * Скрытое пробрасывание пропсов - DI. (но очень красивый).
   * Lifecycle
   * Registry
   * mics
   * `use`
+  * plugins
 
-> Почему плохо кастомные директивы?
-> Они работают как декораторы.... TBD.
+#### Overall
+
+**4.7**
+
+### Svelte
+
+* Props
+  5/5 - Именованные пропсы. Понятно как их типизировать и устанавливать.
+* Template language
+  * 4.7 - Смесь vue + jsx. Явно передаёшь лямбду или ссылку на функцию.
+* Как хранить состояние
+  * REACTIVITY EVERYWHERE 3/5
+  * STORE ?
+  * script `type="module"` 5/5
+* Control flow
+  * 4.5/5 - Кастомные директивы.
+* Unit Tests. Какие библиотеки и фреймворки.
+  * testing-library ?;
+* Documentation.
+  4.3/5 - Сразу заставляет юзать svelte.kit, Dark Theme, CMD+K not working.
+* Infra
+  * Dev tools 4/5
+  * Performance Utils ??
+* Reactivity
+  3.5/5
+* Data fetching
+  * Request state (3)
+  * Caching (1)
+  * Error Handling (0)
+  * Refetch (4)
+  4.5/5
+* Фреймворкнутость
+  * Темплеитирование +
+  * Реактивность +
+  * Скрытое пробрасывание пропсов - DI. (но очень красивый). +
+  * Lifecycle +
+* SSR as default 0/5
+
+#### Overall
+
+**4.4**
 
 #### Todos
 
 * [x] Разобраться почему деструктуризация пропсов в провайдере не работает. (Solid.js) <https://www.solidjs.com/guides/faq#why-do-i-lose-reactivity-when-i-destructure-props>
 * [ ] Тесты не работаю  при последующем запуске в Solid.js. (cleanup() не работает...).
+* [ ] Как управлять реактивностью в SVELTE?
