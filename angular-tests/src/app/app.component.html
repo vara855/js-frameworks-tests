@@ -1,0 +1,18 @@
+<main class="main">
+  <div class="head">
+    Angular - Chat
+    <div *ngIf="httpService.isBeOk; then beOk; else beBroken"></div>
+    <ng-template #beOk><div>👌 Backend is OK!</div></ng-template>
+    <ng-template #beBroken><div>Backend is not working</div></ng-template>
+  </div>
+  <div class="content">
+    <ng-template *ngFor="let message of chatService.messages; index as i">
+      {{message.message}}
+    </ng-template>
+
+    {{array | json}}
+    <ng-template *ngFor="let message of array; index as i">
+      {{message.message}}
+    </ng-template>
+  </div>
+</main>
