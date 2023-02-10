@@ -9,6 +9,4 @@ export type CMessage = {
     email: string;
   };
 };
-
-
 export type SendMessage = (m: string) => void;
