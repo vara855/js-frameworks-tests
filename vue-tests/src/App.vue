@@ -1,14 +1,5 @@
 <script setup lang="ts">
-import {
-  Fragment,
-  onMounted,
-  ref,
-  onUnmounted,
-  watchEffect,
-  watch,
-  provide,
-  type Ref,
-} from "vue";
+import { ref, onUnmounted, provide } from "vue";
 import ChatMessage from "./components/ChatMessage.vue";
 import ChatFooter from "./components/ChatFooter.vue";
 import type { CMessage, SendMessage } from "./types";
@@ -54,26 +45,25 @@ const sendMessage: SendMessage = (message: string) => {
 provide<SendMessage>("sendMessage", sendMessage);
 
 onUnmounted(() => {
-  wsClientRef?.close();
+  wsClientRef.close();
 });
 </script>
 
 <template>
-  <main className="main">
-    <div className="head">
+  <main class="main">
+    <div class="head">
       Vue js - Chat
-      <div>{{ !error && "👌 Backend is OK!" }}</div>
-      <!-- <div>{!beStatus.error && "👌 Backend is OK!"}</div> #}-->
+      <div v-if="!error">👌 Backend is OK!</div>
     </div>
-    <div className="content">
+    <div class="content">
       <div v-if="loading">Loading</div>
       <template v-else>
-        <div className="chat-header">
+        <div class="chat-header">
           <h2>Chat messages:</h2>
-          <div className="chat-toolbar">
+          <div class="chat-toolbar">
             <input
-              v-mode="userName"
-              className="chat-input"
+              v-model="userName"
+              class="chat-input"
               type="text"
               placeholder="User Name"
             />
@@ -87,16 +77,10 @@ onUnmounted(() => {
             <ChatMessage :message="message" />
           </template>
         </TransitionGroup>
-        <div className="chat-controls">
+        <div class="chat-controls">
           <ChatFooter />
         </div>
       </template>
     </div>
   </main>
 </template>
-
-<style module>
-.myClass {
-  background-color: tomato;
-}
-</style>
